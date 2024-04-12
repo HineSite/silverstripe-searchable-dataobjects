@@ -83,7 +83,7 @@ class SearchableDataObject extends DataExtension
         $sql = join(' ', [
             'CREATE TABLE IF NOT EXISTS "SearchableDataObjects" (',
                 '"ID" int(10) ' . $unsigned . ' NOT NULL,',
-                '"ClassName" ' . $schema->varchar(['precision' => 255]) . ',',
+                '"ClassName" ' . $schema->varchar(['precision' => 245]) . ',',
                 '"Title" ' . $schema->varchar(['precision' => 255]) . ' NOT NULL,',
                 '"Content" ' . $schema->text([]) . ' NOT NULL,',
                 '"PageID" ' . $schema->int(['precision' => 11, 'null' => 'NOT NULL', 'default' => 0]) . ',',
