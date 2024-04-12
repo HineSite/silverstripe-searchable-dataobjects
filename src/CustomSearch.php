@@ -49,7 +49,7 @@ class CustomSearch extends Extension
      */
     public function SearchForm()
     {
-        $form = new SearchForm($this->getControllerForSearchForm(), 'SearchForm', $this->getSearchFields(), $this->getSearchActions());
+        $form = SearchForm::create($this->getControllerForSearchForm(), 'SearchForm', $this->getSearchFields(), $this->getSearchActions());
         return $form;
     }
 
@@ -60,14 +60,15 @@ class CustomSearch extends Extension
      */
     public function getSearchFields()
     {
-        $searchText = _t('SearchForm.SEARCH', 'Search');
-
-        if ($this->owner->request && $this->owner->request->getVar('Search')) {
-            $searchText = $this->owner->request->getVar('Search');
+        $searchText = '';
+        if ($this->owner->getRequest() && $this->owner->getRequest()->getVar('Search')) {
+            $searchText = $this->owner->getRequest()->getVar('Search');
         }
 
-        $fields = new FieldList(
-            new TextField('Search', false, $searchText)
+        $placeholder = _t('SilverStripe\\CMS\\Search\\SearchForm.SEARCH', 'Search');
+        $fields = FieldList::create(
+            TextField::create('Search', false, $searchText)
+                ->setAttribute('placeholder', $placeholder)
         );
 
         $this->owner->extend('updateSearchFields', $fields);
@@ -83,7 +84,7 @@ class CustomSearch extends Extension
     public function getSearchActions()
     {
         $actions = new FieldList(
-            new FormAction('results', _t('SearchForm.GO', 'Go'))
+            FormAction::create('results', _t('SilverStripe\\CMS\\Search\\SearchForm.GO', 'Go'))
         );
 
         $this->owner->extend('updateSearchActions', $actions);
@@ -185,7 +186,7 @@ class CustomSearch extends Extension
         $data = array(
                 'Results' => $this->getSearchResults($request, $data),
                 'Query' => $form->getSearchQuery(),
-                'Title' => _t('CustomSearch.SEARCHRESULTS', 'Risultati della ricerca')
+            'Title' => _t('SilverStripe\\CMS\\Search\\SearchForm.SearchResults', 'Search Results')
         );
 
         return $this->owner->customise($data)->renderWith(array('Page_results', 'Page'));
